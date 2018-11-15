@@ -10,23 +10,45 @@ const T = new Twit({
 });
 
 const searchTweets = (query, callback) => {
-    // if(query === null){
-    //     res.json("");
-    //     return ;
-    // }
-    // query.replace(/[^a-zA-Z0-9À-ž\s]/g, "");
-    callback(query);
-    // T.get('search/tweets', { q: query+' since:2018-07-11', count: 100 }, function (err, data, response) {
-    //     if (err) {
-    //         console.log('ERROR: ', err);
-    //         return;
-    //     }
-    //     callback(data.statuses);
-    // });
+    if(query === null){
+        res.json("");
+        return ;
+    }
+    query.replace(/[^a-zA-Z0-9À-ž\s]/g, "");
+    // callback(query); //test
+    T.get('search/tweets', { q: query+' since:2018-07-11', count: 100 }, function (err, data, response) {
+        if (err) {
+            console.log('ERROR: ', err);
+            return;
+        }
+        if(!(query in OldStatuses)){
+            OldStatuses[query] = [];
+        }
+
+        for(let i = 0; i < data.statuses.length; i++){
+            const newId = data.statuses[i].id;
+            let isEqual = false;
+            for(let j = 0; j < OldStatuses[query]; j++){
+                const oldId = OldStatuses[query].id;
+                if(oldId === newId){
+                    isEqual = true;
+                    break;
+                }
+            }
+
+            if(!isEqual){
+                OldStatuses[query] = data.statuses;
+                break;
+            }
+        }
+        callback(data.statuses);
+    });
 };
 
 const queries = [];
 let index = -1;
+const OldStatuses = {}; // key -> value === query -> statuses
+
 
 const interval = setInterval(() => {
     if(index < 0 && queries.length == 0) return;
