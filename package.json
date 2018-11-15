@@ -1,0 +1,25 @@
+{
+  "name": "twitter-maps-api",
+  "version": "1.0.0",
+  "description": "Twitter-Maps API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProgerDav/Twitter-Maps-API.git"
+  },
+  "author": "Davit Gyulnazaryan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ProgerDav/Twitter-Maps-API/issues"
+  },
+  "homepage": "https://github.com/ProgerDav/Twitter-Maps-API#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1",
+    "twit": "^2.2.11"
+  }
+}
