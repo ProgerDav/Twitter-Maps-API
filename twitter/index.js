@@ -58,14 +58,14 @@ const interval = setInterval(() => {
         index = 0;
     } 
 
-    searchTweets(queries[index], (tweets) => {
+    searchTweets(queries[index], tweets => {
         console.log(index, tweets);
     });
 }, 2000);
 
 module.exports = {
     push_query: function(query, callback){
-        if(queries.indexOf(query) == -1){
+        if(queries.indexOf(query) == -1 && query.length > 0){
             queries.unshift(query);
         }
     }

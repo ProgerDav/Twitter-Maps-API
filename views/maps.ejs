@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="pac-input">
+    <div id="map"></div>
+    <script>
+        var map;
+        function initAutocomplete() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 40.1533693, lng: 44.4185276 },
+                zoom: 15
+            });
+
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function() {
+            searchBox.setBounds(map.getBounds());
+            });
+
+            var markers = [];
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function() {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+                return;
+            }
+
+            // For each place, get the icon, name and location.
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function(place) {
+                if (!place.geometry) {
+                console.log("Returned place contains no geometry");
+                return;
+                }
+                
+                console.log(place.geometry.location.lat(), place.geometry.location.lng());
+                // Create a marker for each place.
+                markers.push(new google.maps.Marker({
+                    map: map,
+                    // title: place.name,
+                    position: place.geometry.location
+                }));
+
+                if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+                } else {
+                bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+            });
+            google.maps.event.addListener(map, 'click', event => {
+                console.log(event.latLng.lat(), event.latLng.lng());
+                const marker = new google.maps.Marker({
+                    position: event.latLng,
+                    map: map
+                });
+            });
+        }
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoIunpMrruPoHJm79WSjH7bPJlhhB7C-c&libraries=places&callback=initAutocomplete"
+         async defer></script>
+</body>
+
+</html>
