@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ProgerDav/Twitter-Maps-API#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "socket.io": "^2.1.1",

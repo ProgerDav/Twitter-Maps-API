@@ -25,6 +25,7 @@
 <body>
     <input type="text" id="pac-input">
     <div id="map"></div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
     <script>
         let map;
         function initAutocomplete() {
@@ -64,7 +65,7 @@
                 map.fitBounds(bounds);
             });
             google.maps.event.addListener(map, 'click', event => {
-                console.log(event.latLng.lat(), event.latLng.lng());
+                // console.log(event.latLng.lat(), event.latLng.lng());
                 addMarker(event.latLng);
             });
         }
@@ -74,6 +75,11 @@
                 position: location,
                 map: map,
                 icon: {url: "../static/twit.png", scaledSize: new google.maps.Size(50, 50)},
+            });
+            const loc = [location.lat(), location.lng()];
+            console.log(loc);
+            $.post('/location', {loc: loc.join(',')}, data => {
+                console.log(data);
             });
         }
     </script>

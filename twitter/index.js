@@ -9,40 +9,36 @@ const T = new Twit({
     strictSSL:            true,
 });
 
-const searchTweets = (query, callback) => {
-    if(query === null){
-        res.json("");
-        return ;
-    }
-    query.replace(/[^a-zA-Z0-9À-ž\s]/g, "");
-    // callback(query); //test
-    T.get('search/tweets', { q: query+' since:2018-07-11', count: 100 }, function (err, data, response) {
-        if (err) {
-            console.log('ERROR: ', err);
-            return;
-        }
-        if(!(query in OldStatuses)){
-            OldStatuses[query] = [];
-        }
+const searchTweets = ($lat, callback) => {
+        callback($lat);
+        //test
+    // T.get('search/tweets', { geocode: $lat+','+$lng+',1km', count: 100 }, function (err, data, response) {
+    //     if (err) {
+    //         console.log('ERROR: ', err);
+    //         return;
+    //     }
+    //     if(!(query in OldStatuses)){
+    //         OldStatuses[query] = [];
+    //     }
 
-        for(let i = 0; i < data.statuses.length; i++){
-            const newId = data.statuses[i].id;
-            let isEqual = false;
-            for(let j = 0; j < OldStatuses[query]; j++){
-                const oldId = OldStatuses[query].id;
-                if(oldId === newId){
-                    isEqual = true;
-                    break;
-                }
-            }
+    //     for(let i = 0; i < data.statuses.length; i++){
+    //         const newId = data.statuses[i].id;
+    //         let isEqual = false;
+    //         for(let j = 0; j < OldStatuses[query]; j++){
+    //             const oldId = OldStatuses[query].id;
+    //             if(oldId === newId){
+    //                 isEqual = true;
+    //                 break;
+    //             }
+    //         }
 
-            if(!isEqual){
-                OldStatuses[query] = data.statuses;
-                break;
-            }
-        }
-        callback(data.statuses);
-    });
+    //         if(!isEqual){
+    //             OldStatuses[query] = data.statuses;
+    //             break;
+    //         }
+    //     }
+    //     callback(data.statuses);
+    // });
 };
 
 const queries = [];
@@ -58,7 +54,7 @@ const interval = setInterval(() => {
         index = 0;
     } 
 
-    searchTweets(queries[index], tweets => {
+    searchTweets(queries[index],tweets => {
         console.log(index, tweets);
     });
 }, 2000);

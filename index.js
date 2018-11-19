@@ -25,9 +25,7 @@ app.get('/', (req, res) => {
 
 app.post("/location", (req, res) => {
     const loc = req.body.loc;
-    twitter.push_query(loc, () => {
-        // 
-    });
+    twitter.push_query(loc, () => {    });
 })
 // io.on("connection", socket => {
 //     console.log("new user connected");
